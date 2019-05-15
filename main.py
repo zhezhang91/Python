@@ -66,3 +66,88 @@ class Chips():
 
     def lose_bet(self):
         self.total -= self.bet
+
+
+def take_bet(chips):
+
+    while True:
+
+        try:
+            chips.bet = int(input('How many chips would you like to bet?'))
+        except:
+            print('Sorry please provide an integer')
+        else:
+            if chips.bet > chips.total:
+                print(
+                    f'Sorry, you do not have enough chips! You currently have: {chips.total}')
+            else:
+                break
+
+
+def hit(deck, hand):
+    single_card = deck.deal()
+    hand.add_card()
+    hand.adjust_for_ace()
+
+
+def hit_or_stand(deck, hand):
+    global playing
+
+    while True:
+        x = input('Hit or Stand? Enter h or s ')
+
+        if x[0].lower() == 'h':
+            hit(deck, hand)
+
+        elif x[0].lower() == 's':
+            print("Player Stands Dealer's Turn")
+            playing = False
+
+        else:
+            print("Sorry, I did not understand that, Please enter h ro s only!")
+            continue
+
+        break
+
+
+def show_some(player, dealer):  # creates a function that receives two Hand() objects as parameter
+    print("\nDealer's Hand:")  # print the string
+    # print the string card hidden, as if there was a card there
+    print(" <card hidden>")
+    print('', dealer.cards[1])  # show the second card from dealer
+    # print every card inside of player.cards, separated by a new line
+    print("\nPlayer's Hand:", *player.cards, sep='\n ')
+
+
+def show_all(player, dealer):  # creates a function that receives two Hand() objects as parameter
+    # print every card inside of dealer.cards, separated by a new line
+    print("\nDealer's Hand:", *dealer.cards, sep='\n ')
+    # print the value from dealer's hand
+    print("Dealer's Hand =", dealer.value)
+    # print every card inside of player.cards, separated by a new line
+    print("\nPlayer's Hand:", *player.cards, sep='\n ')
+    print("Player's Hand =", player.value)  # print the value for player's hand
+
+
+def player_busts(player, dealer, chips):
+    print('BUST PLAYER!')
+    chips.lose_bet()
+
+
+def player_wins(player, dealer, chips):
+    print('PLAYER WINS!')
+    chips.win_bet()
+
+
+def dealer_busts(player, dealer, chips):
+    print('PLAYER WINS! DEALER BUSTED!')
+    chips.win_bet()
+
+
+def dealer_wins(player, dealer, chips):
+    print('DEALER WINS! ')
+    chips.lose_bet()
+
+
+def push(player, dealer):
+    print('Dealer and Player tie! PUSH')
